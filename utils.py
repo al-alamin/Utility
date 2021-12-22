@@ -9,8 +9,23 @@ import pickle
 import math
 import pathlib
 import shutil
-import tensorflow as tf
-import matplotlib.image as mpimg
+# import matplotlib.image as mpimg
+
+
+# # ================================================= Startup codes for new notebooks
+# sys.path.append(r'C:\Alamin\Dropbox\Codes')
+# sys.path.append(r'/home/mdabdullahal.alamin/alamin/Utility/')
+# import Utility.utils as util
+
+# from importlib import reload
+# reload(utils)
+
+
+def test():
+    print("Util method test has been loaded correctly")
+
+def test2():
+    print("Util method test 2 has been loaded correctly")
 
 
 def save_df(df, file_name, append=False):
@@ -18,6 +33,10 @@ def save_df(df, file_name, append=False):
         df.to_csv(file_name, index=False, quotechar='"', quoting=csv.QUOTE_NONNUMERIC, mode="a", header=False)
     else:
         df.to_csv(file_name, index=False, quotechar='"', quoting=csv.QUOTE_NONNUMERIC)
+
+def save_df(df, base_dir, file_name):
+    file_name = os.path.join(base_dir, file_name)
+    df.to_csv(file_name, index=False, quotechar='"', quoting=csv.QUOTE_NONNUMERIC)
 
 
 def load_obj(base_dir, name):
@@ -34,9 +53,7 @@ def save_obj(obj, base_dir, name):
     print("Saved object to a file: %s" % (str(file_path)))
 
 
-def save_df(df, base_dir, file_name):
-    file_name = os.path.join(base_dir, file_name)
-    df.to_csv(file_name, index=False, quotechar='"', quoting=csv.QUOTE_NONNUMERIC)
+
 
 def remove_directory(path):
     if os.path.exists(path):
@@ -55,17 +72,16 @@ def create_directory(dir):
     else:
         print("Directory %s already exists and so returning." % dir)
 
-def test():
-    print("Util method test has been loaded correctly")
 
-def test2():
-    print("Util method test 2 has been loaded correctly")
 
 
 def remove_and_create_directory(dir):
     print("Going to REMOVE and CREATE directory: %s" % dir)
     remove_directory(dir)
     create_directory(dir)
+
+
+# =========================================================== Image
 
 def get_list_of_image_from_directory(dir):
 
@@ -102,3 +118,28 @@ def image_visualization(image_paths, ncols=4, title=None):
     plt.close()
     plt.cla()
     plt.clf()
+
+
+# ========================================================================= EMSE 
+
+import re
+def get_tags(tags_str):
+    return re.findall(r'<(.+?)>', tags_str)
+
+
+
+def make_link(id, type):
+    '''
+    id = postid
+    type : 'q' for question
+           'a' for answer
+    '''
+    url = f'https://stackoverflow.com/{type}/{id}'
+    return f'=HYPERLINK("{url}", "{id}")'
+
+
+def linkToId(x):
+    '''
+    Takes a excel styled link and retures the QuestionID
+    '''
+    return int(x.split('"')[::-1][1])
