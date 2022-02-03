@@ -1,15 +1,12 @@
 import glob, os, sys
-import matplotlib.pylab as plt
 import numpy as np
-# import tensorflow as tf
-# print(tf.__version__)
 import pandas as pd
 import csv
 import pickle
 import math
 import pathlib
 import shutil
-# import matplotlib.image as mpimg
+
 
 
 # # ================================================= Startup codes for new notebooks
@@ -20,126 +17,197 @@ import shutil
 # from importlib import reload
 # reload(utils)
 
+# %load_ext autoreload
+# %autoreload 2
+
+
 
 def test():
-    print("Util method test has been loaded correctly")
-
-def test2():
-    print("Util method test 2 has been loaded correctly")
+    print("Util method test has been loaded correctly 2")
 
 
-def save_df(df, file_name, append=False):
-    if append:
-        df.to_csv(file_name, index=False, quotechar='"', quoting=csv.QUOTE_NONNUMERIC, mode="a", header=False)
-    else:
-        df.to_csv(file_name, index=False, quotechar='"', quoting=csv.QUOTE_NONNUMERIC)
+class Pandas:
+    def __init__(self, base_dir):
+        self.BASE_DIR = base_dir
 
-def save_df(df, base_dir, file_name):
-    file_name = os.path.join(base_dir, file_name)
-    df.to_csv(file_name, index=False, quotechar='"', quoting=csv.QUOTE_NONNUMERIC)
+    def save_df(self, df, file_name, append=False):
+        file_name = os.path.join(self.BASE_DIR, file_name)
+        if append:
+            df.to_csv(file_name, index=False, quotechar='"', quoting=csv.QUOTE_NONNUMERIC, mode="a", header=False)
+        else:
+            df.to_csv(file_name, index=False, quotechar='"', quoting=csv.QUOTE_NONNUMERIC)
 
 
-def load_obj(base_dir, name):
-    file_path = os.path.join(base_dir, "pickle", name + ".pkl")
-    with open(file_path, 'rb') as f:
-        return pickle.load(f)
+    def load_obj(self, name):
+        file_path = os.path.join(self.BASE_DIR, "pickle", name + ".pkl")
+        with open(file_path, 'rb') as f:
+            return pickle.load(f)
 
-def save_obj(obj, base_dir, name):
-    dir_path = os.path.join(base_dir, "pickle")
-    create_directory(dir_path)
-    file_path = os.path.join(dir_path, name + ".pkl")
-    with open(file_path, 'wb') as f:
-        pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
-    print("Saved object to a file: %s" % (str(file_path)))
+    def save_obj(self, obj, name):
+        dir_path = os.path.join(self.BASE_DIR, "pickle")
+        self.Directory.create_directory(dir_path)
+        file_path = os.path.join(dir_path, name + ".pkl")
+        with open(file_path, 'wb') as f:
+            pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
+        print("Saved object to a file: %s" % (str(file_path)))
 
 
 
-
-def remove_directory(path):
-    if os.path.exists(path):
-        print("%s path exists and removing it." % path)
-        shutil.rmtree(path)
-
-def remove_file(file_name):
-    if (os.path.isfile(file_name)):
-        print("Output file %s exists and removing it." % file_name)
-        os.remove(file_name)
-
-def create_directory(dir):
-    if(not os.path.exists(dir)):
-        print("Creating directory %s." % dir)
-        os.makedirs(dir)
-    else:
-        print("Directory %s already exists and so returning." % dir)
+    def test(self):
+        print("Pandas test")
+        print(self.BASE_DIR)
+        SO.test()
 
 
 
 
-def remove_and_create_directory(dir):
-    print("Going to REMOVE and CREATE directory: %s" % dir)
-    remove_directory(dir)
-    create_directory(dir)
-
-
-# =========================================================== Image
-
-def get_list_of_image_from_directory(dir):
-
-    res = list(pathlib.Path(dir).glob("**/*.jpg"))
-    res += list(pathlib.Path(dir).glob("**/*.png"))
-    print("Total %d images found in directory %s" % (len(res), dir))
-    return res
-
-# get_list_of_image_from_directory(dataset_simulated_dir)
-
-
-def check_gpu():
-    print("#" * 10)
-    print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
-    print(tf.config.list_physical_devices('GPU'))
+class Test:
+    def __init__(self):
+        pass
+        
 
 
 
-def image_visualization(image_paths, ncols=4, title=None):
-    nrows = int(math.ceil(len(image_paths) * 1.0 / ncols))
 
-    fig = plt.gcf()
-    fig.set_size_inches(ncols*4, nrows*4)
-    fig.tight_layout()
-    if title is not None:
-        fig.suptitle(title, fontsize="x-large")
+class Directory:
+    def __init__(self):
+        pass
 
-    for i, img in enumerate(image_paths):
-        img = mpimg.imread(img)
-        sp = plt.subplot(nrows, ncols, i + 1)
-        sp.axis('Off')
-        plt.imshow(img)
-    plt.show()
-    plt.close()
-    plt.cla()
-    plt.clf()
+    def remove_directory(path):
+        if os.path.exists(path):
+            print("%s path exists and removing it." % path)
+            shutil.rmtree(path)
+
+    def remove_file(file_name):
+        if (os.path.isfile(file_name)):
+            print("Output file %s exists and removing it." % file_name)
+            os.remove(file_name)
+
+    def create_directory(dir):
+        if(not os.path.exists(dir)):
+            print("Creating directory %s." % dir)
+            os.makedirs(dir)
+        else:
+            print("Directory %s already exists and so returning." % dir)
+
+    def remove_and_create_directory(dir):
+        print("Going to REMOVE and CREATE directory: %s" % dir)
+        Directory.remove_directory(dir)
+        Directory.create_directory(dir)
+
+    def get_list_of_image_from_directory(dir):
+        res = list(pathlib.Path(dir).glob("**/*.jpg"))
+        res += list(pathlib.Path(dir).glob("**/*.png"))
+        print("Total %d images found in directory %s" % (len(res), dir))
+        return res
 
 
-# ========================================================================= EMSE 
+
+
+
+
+class TF:
+    def __init__(self):
+        import tensorflow as tf
+        print(tf.__version__)
+        self.tf = tf
+
+    def check_gpu(self):
+        print("#" * 10)
+        print("Num GPUs Available: ", len(self.tf.config.list_physical_devices('GPU')))
+        print(self.tf.config.list_physical_devices('GPU'))
+
+
+class Plot:
+    def __init__(self):
+        import matplotlib.pylab as plt
+        import matplotlib.image as mpimg
+        self.plt = plt
+        self.mpimg = mpimg
+
+    def image_visualization(self, image_paths, ncols=4, title=None):
+        nrows = int(math.ceil(len(image_paths) * 1.0 / ncols))
+
+        fig = self.plt.gcf()
+        fig.set_size_inches(ncols*4, nrows*4)
+        fig.tight_layout()
+        if title is not None:
+            fig.suptitle(title, fontsize="x-large")
+
+        for i, img in enumerate(image_paths):
+            img = self.mpimg.imread(img)
+            sp = self.plt.subplot(nrows, ncols, i + 1)
+            sp.axis('Off')
+            self.plt.imshow(img)
+        self.plt.show()
+        self.plt.close()
+        self.plt.cla()
+        self.plt.clf()
+
 
 import re
-def get_tags(tags_str):
-    return re.findall(r'<(.+?)>', tags_str)
+class SO:
+    def __init__(self, dataset_dir):
+        import lxml.etree  as ET
+        self.ET = ET
+        self.dataset_dir = dataset_dir
+        self.Posts_COLS = ["Id", "PostTypeId", "AcceptedAnswerId", "ParentId", "CreationDate", "DeletionDate", "Score", "ViewCount", "Body",
+        "OwnerUserId", "OwnerDisplayName", "LastEditorUserId", "LastEditorDisplayName", "LastEditDate", "LastActivityDate",
+        "Title", "Tags", "AnswerCount", "CommentCount", "FavoriteCount", "ClosedDate", "CommunityOwnedDate", "ContentLicense"]
+        
+
+    def get_tags(tags_str):
+        return re.findall(r'<(.+?)>', tags_str)
+
+    def make_link(id, type):
+        '''
+        id = postid
+        type : 'q' for question
+                'a' for answer
+        '''
+        url = f'https://stackoverflow.com/{type}/{id}'
+        return f'=HYPERLINK("{url}", "{id}")'
+
+    def linkToId(link):
+        '''
+        Takes a excel styled link and retures the QuestionID
+        '''
+        return int(link.split('"')[::-1][1])
+    
+    def test():
+        print("SO tests")
 
 
+    
+    def get_questions_from_tags(self, TAGS):
+        Progress_Interval = 10000000
 
-def make_link(id, type):
-    '''
-    id = postid
-    type : 'q' for question
-           'a' for answer
-    '''
-    url = f'https://stackoverflow.com/{type}/{id}'
-    return f'=HYPERLINK("{url}", "{id}")'
+        POSTS_file = os.path.join(self.dataset_dir, "Posts.xml")
+        print("Going to extract questions from: %s \n and for the following tags: %s" % (POSTS_file, TAGS))
 
+        context = self.ET.iterparse(POSTS_file, events=("end",))
+        
+        df_posts = pd.DataFrame(columns = self.Posts_COLS)
+        total_questions = 0
 
-def linkToId(x):
-    '''
-    Takes a excel styled link and retures the QuestionID
-    '''
-    return int(x.split('"')[::-1][1])
+        _, root = next(context)
+        for event, elem in context:
+            if elem.tag == "row":
+                tags = elem.attrib.get('Tags', '')
+                tags_list = SO.get_tags(tags) # list of tags
+                for tag in TAGS:
+                    if tag in tags_list:
+                        dic = {}
+                        for col in self.Posts_COLS:
+                            dic[col] = elem.attrib.get(col, '')
+                            # data.append(elem.attrib.get(col, ''))
+                        df_posts = df_posts.append(pd.Series(dic), ignore_index = True)    
+                        continue
+                # progress
+                if total_questions % Progress_Interval == 0:
+                    print('done', elem.attrib['Id'])
+                elem.clear()
+                root.clear()
+                total_questions += 1
+        df_posts.drop_duplicates('Id', inplace=True)
+        return df_posts
