@@ -31,27 +31,42 @@ class Pandas:
         self.BASE_DIR = base_dir
 
     def save_df(self, df, file_name, append=False):
-        file_name = os.path.join(self.BASE_DIR, file_name)
+        dir_path = os.path.join(self.BASE_DIR, "output")
+        Directory.create_directory(dir_path)
+        file_name = os.path.join(dir_path, file_name)
+        Pandas.static_save_df(df, file_name, append)
+
+
+    def static_save_df(df, file_name, append=False):
         if append:
             df.to_csv(file_name, index=False, quotechar='"', quoting=csv.QUOTE_NONNUMERIC, mode="a", header=False)
         else:
             df.to_csv(file_name, index=False, quotechar='"', quoting=csv.QUOTE_NONNUMERIC)
-
+        print("Dataframe has been saved in: %s" % (file_name))
 
     def load_obj(self, name):
         file_path = os.path.join(self.BASE_DIR, "pickle", name + ".pkl")
+        return Pandas.static_load_obj(file_path)
+
+
+    def static_load_obj(file_path):
         with open(file_path, 'rb') as f:
             return pickle.load(f)
 
     def save_obj(self, obj, name):
+        print("Base method")
         dir_path = os.path.join(self.BASE_DIR, "pickle")
-        self.Directory.create_directory(dir_path)
+        Directory.create_directory(dir_path)
         file_path = os.path.join(dir_path, name + ".pkl")
+        Pandas.static_save_obj(obj, file_path)
+        # with open(file_path, 'wb') as f:
+        #     pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
+        # print("Saved object to a file: %s" % (str(file_path)))
+
+    def static_save_obj(obj, file_path):
         with open(file_path, 'wb') as f:
             pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
         print("Saved object to a file: %s" % (str(file_path)))
-
-
 
     def test(self):
         print("Pandas test")
