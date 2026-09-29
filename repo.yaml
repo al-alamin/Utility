@@ -1,0 +1,15 @@
+schema_version: 1
+summary: Reusable Python utilities and notebook import helpers for research projects.
+state: unknown
+intended_readers:
+- Researchers maintaining or reusing the shared Python helpers.
+consult_when:
+- Reusing common data-analysis, filesystem or notebook import utilities.
+watch_when:
+- Changes to utils.py, basic_modules.py or documentation of reusable helpers.
+current_capabilities:
+- utils.py is documented as providing Pandas, TensorFlow, directory/file management
+  and Stack Overflow XML-analysis helpers.
+- basic_modules.py is documented as collecting common imports for Jupyter notebooks;
+  both Python files are tracked.
+planned_capabilities: []
